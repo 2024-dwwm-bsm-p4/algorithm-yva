@@ -1,0 +1,37 @@
+<form class="w-100" action="traitement.php" method="POST">
+    <div class="mb-3">
+      <label for="prenom" class="form-label">Prénom</label>
+      <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prénom" required>
+    </div>
+  
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
+    </div>
+  
+    <div class="mb-3">
+      <label for="age" class="form-label">Âge (18 à 70 ans)</label>
+      <input type="number" class="form-control" id="age" name="age" placeholder="Renseignez votre âge" min="18" max="70" required>
+    </div>
+  
+    <div class="mb-3 d-flex align-items-center">
+      <label for="taille" class="form-label me-2">Taille (1,26m à 3m)</label>
+      <input type="number" class="form-control w-auto me-2" id="taille" name="taille" placeholder="1,7" min="1.26" max="3" step="0.01" required>
+      <span>m</span>
+    </div>
+  
+    <div class="mb-3">
+      <label class="form-label">Sexe</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="sexe" id="femme" value="femme" required>
+        <label class="form-check-label" for="femme">Femme</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="sexe" id="homme" value="homme" required>
+        <label class="form-check-label" for="homme">Homme</label>
+      </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Enregistrer les données</button>
+</form>
+
