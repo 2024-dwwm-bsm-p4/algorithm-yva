@@ -14,14 +14,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($prenom) || empty($nom) || $age < 18 || $age > 70 || $taille < 1.26 || $taille > 3 || !in_array($sexe, ['femme', 'homme'])) {
         echo "<p>Des informations sont incorrectes ou manquantes.</p>";
     } else {
-        // Ajouter les nouvelles données à la session
-        $_SESSION['user_data'][] = [
-            'prenom' => $prenom,
-            'nom' => $nom,
-            'age' => $age,
-            'taille' => $taille,
-            'sexe' => $sexe
-        ];
+        // Rechercher si l'utilisateur existe déjà dans la session
+        $existingUserIndex = null;
+        if (isset($_SESSION['user_data'])) {
+            foreach ($_SESSION['user_data'] as $index => $user) {
+                if ($user['prenom'] === $prenom && $user['nom'] === $nom) {
+                    $existingUserIndex = $index;
+                    break;
+                }
+            }
+        }
+
+        // Si l'utilisateur existe déjà, mettre à jour ses informations
+        if ($existingUserIndex !== null) {
+            $_SESSION['user_data'][$existingUserIndex] = array_merge($_SESSION['user_data'][$existingUserIndex], [
+                'prenom' => $prenom,
+                'nom' => $nom,
+                'age' => $age,
+                'taille' => $taille,
+                'sexe' => $sexe
+            ]);
+        } else {
+            // Ajouter un nouvel utilisateur si pas déjà dans la session
+            if (!isset($_SESSION['user_data'])) {
+                $_SESSION['user_data'] = []; // S'assurer que le tableau est initialisé
+            }
+
+            // Ajouter un utilisateur à l'intérieur de $_SESSION['user_data']
+            $_SESSION['user_data'][] = [
+                'prenom' => $prenom,
+                'nom' => $nom,
+                'age' => $age,
+                'taille' => $taille,
+                'sexe' => $sexe
+            ];
+        }
 
         // Copier les données de la session dans un tableau temporaire
         $table = $_SESSION['user_data'];
@@ -30,6 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si aucune donnée n'a été soumise, charger la session dans $table pour les traitements ultérieurs
     $table = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : [];
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -97,41 +126,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "<h2>Débogage</h2>";
                         echo "<div class='w-50 h-75 d-flex justify-content-center align-items-center '>";
                         echo "<pre class='p-2'>";
-                        print_r($table); // Affiche les données de $table pour débogage
+                        print_r($_SESSION['user_data']); // Affiche les données de $table pour débogage
                         echo "</pre>";
                         echo  "</div>";
                         break;
 
-                    case 'concatenation':
-                        echo "<h2>Concaténation</h2>";
-
-                        if (!empty($table)) {
-                            foreach ($table as $user) {
-                                $prenom = $user['prenom'];
-                                $nom = $user['nom'];
-                                $age = $user['age'];
-                                $taille = $user['taille'];
-
-                                // Première phrase : afficher le nom et l'âge
-                                echo "<p>Mr $nom $prenom</p>";
-                                echo "<p>J'ai $age ans, je mesure $taille m.</p>";
-
-                                // Boucle pour afficher nom et prénom en majuscules avec taille modifiée
+                        case 'concatenation':
+                            echo "<h2>Concaténation</h2>";
+                        
+                            if (!empty($table)) {
                                 foreach ($table as $user) {
-                                    $prenom = strtoupper($user['prenom']);
-                                    $nom = strtoupper($user['nom']);
+                                    $prenom = $user['prenom'];
+                                    $nom = $user['nom'];
                                     $age = $user['age'];
-                                    $taille = str_replace('.', ',', $user['taille']);
-
-                                    echo "<p>Bonjour, je suis $nom $prenom et j'ai $age ans, je mesure $taille m.</p>";
+                                    $taille = $user['taille'] ?? null; // Utiliser null si la clé 'taille' n'existe pas
+                        
+                                    // Première phrase : afficher le nom et l'âge
+                                    echo "<p>Mr $nom $prenom</p>";
+                                    echo "<p>J'ai $age ans, je mesure " . ($taille ? "$taille m" : "non spécifiée") . ".</p>"; // Ajouter une gestion si la taille n'est pas spécifiée
+                        
+                                    // Boucle pour afficher nom et prénom en majuscules avec taille modifiée
+                                    foreach ($table as $user) {
+                                        $prenom = strtoupper($user['prenom']);
+                                        $nom = strtoupper($user['nom']);
+                                        $age = $user['age'];
+                                        $taille = $user['taille'] ?? null; // Utiliser null si la clé 'taille' n'existe pas
+                        
+                                        // Remplacer le point par une virgule dans la taille, si elle est disponible
+                                        $taille_affichee = $taille ? str_replace('.', ',', $taille) : "non spécifiée";
+                        
+                                        echo "<p>Bonjour, je suis $nom $prenom et j'ai $age ans, je mesure $taille_affichee m.</p>";
+                                    }
                                 }
+                            } else {
+                                echo "<p>Aucune donnée à concaténer. Veuillez ajouter des informations.</p>";
                             }
-                        } else {
-                            echo "<p>Aucune donnée à concaténer. Veuillez ajouter des informations.</p>";
-                        }
-                        break;
+                            break;
+                        
 
-                    case 'boucle':
+                  
+                        case 'boucle':
                         echo "<h2>Boucle sur les données de la session</h2>";
                         
                         if (!empty($table)) {
@@ -153,29 +187,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         break;
                     
-                    case 'function':
-                        echo "<h2>Appel d'une Fonction</h2>";
+                        case 'function':
+                            echo "<h2>Appel d'une Fonction</h2>";
+                            
+                            function readTable($table)
+                            {
+                                foreach ($table as $index => $user) {
+                                    echo "<p>===> Utilisateur $index</p>"; 
                         
-                        function readTable($table)
-                        {
-                            foreach ($table as $index => $user) {
-                                echo "<p>===> Utilisateur $index</p>"; 
-
-                                $lineNumber = 0;
-                                foreach ($user as $key => $value) {
-                                    if (is_array($value)) {
-                                        $value = implode(', ', $value);  // Convertir le tableau en chaîne de caractères
+                                    $lineNumber = 0;
+                                    foreach ($user as $key => $value) {
+                                        if (is_array($value)) {
+                                            $value = implode(', ', $value);  // Convertir le tableau en chaîne de caractères
+                                        }
+                        
+                                        // Vérifier si la clé est "image"
+                                        if ($key === 'image' && !empty($value)) {
+                                            // Afficher l'image avec une balise <img>
+                                            echo "<p>à la ligne n°$lineNumber correspond la clé \"$key\" et contient : <br>";
+                                            echo "<img src='uploaded/$value' alt='Image de l'utilisateur' style='max-width:150px;'><br></p>";
+                                        } else {
+                                            // Sinon afficher la clé et la valeur normalement
+                                            echo "<p>à la ligne n°$lineNumber correspond la clé \"$key\" et contient \"$value\"</p>";
+                                        }
+                                        
+                                        $lineNumber++;
                                     }
-                                    echo "<p>à la ligne n°$lineNumber correspond la clé \"$key\" et contient \"$value\"</p>";
-                                    $lineNumber++;
+                                    echo "<br>"; // Séparation entre chaque utilisateur
                                 }
-                                echo "<br>"; 
                             }
-                        }
+                            
+                            echo "<p>===> J'utilise ma fonction readTable()</p>";
+                            readTable($table);
+                            break;
                         
-                        echo "<p>===> J'utilise ma fonction readTable()</p>";
-                        readTable($table);
-                        break;
                     
                     case 'supprimer':
                         // Vider les données de la session et du tableau temporaire
