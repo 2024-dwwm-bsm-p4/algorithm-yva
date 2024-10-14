@@ -4,59 +4,63 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupération et validation des données
-    $prenom = htmlspecialchars($_POST['prenom'] ?? '');
-    $nom = htmlspecialchars($_POST['nom'] ?? '');
+    $prenom = htmlspecialchars($_POST['prenom']);
+    $nom = htmlspecialchars($_POST['nom'] );
     $age = isset($_POST['age']) ? (int)$_POST['age'] : null;
     $taille = isset($_POST['taille']) ? (float)$_POST['taille'] : null;
     $sexe = isset($_POST['sexe']) ? htmlspecialchars($_POST['sexe']) : null;
+    $date_naissance = $_POST['date_naissance'] ?? null;
+    $connaissances = isset($_POST['connaissances']) ? $_POST['connaissances'] : [];
+    $couleur_preferee = $_POST['couleur_preferee'] ?? null;
+    $image = $_FILES['image']['name'] ?? '';
 
-    // Vérifications simples
-    if (empty($prenom) || empty($nom) || $age < 18 || $age > 70 || $taille < 1.26 || $taille > 3 || !in_array($sexe, ['femme', 'homme'])) {
-        echo "<p>Des informations sont incorrectes ou manquantes.</p>";
-    } else {
-        // Rechercher si l'utilisateur existe déjà dans la session
-        $existingUserIndex = null;
-        if (isset($_SESSION['user_data'])) {
-            foreach ($_SESSION['user_data'] as $index => $user) {
-                if ($user['prenom'] === $prenom && $user['nom'] === $nom) {
-                    $existingUserIndex = $index;
-                    break;
-                }
-            }
+    // Initialiser $table à partir de $_SESSION['user_data']
+    $table = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : [];
+
+    // Rechercher si l'utilisateur existe déjà dans $table
+    $existingUserIndex = null;
+    foreach ($table as $index => $user) {
+        if ($user['prenom'] === $prenom && $user['nom'] === $nom) {
+            $existingUserIndex = $index;
+            break;
         }
-
-        // Si l'utilisateur existe déjà, mettre à jour ses informations
-        if ($existingUserIndex !== null) {
-            $_SESSION['user_data'][$existingUserIndex] = array_merge($_SESSION['user_data'][$existingUserIndex], [
-                'prenom' => $prenom,
-                'nom' => $nom,
-                'age' => $age,
-                'taille' => $taille,
-                'sexe' => $sexe
-            ]);
-        } else {
-            // Ajouter un nouvel utilisateur si pas déjà dans la session
-            if (!isset($_SESSION['user_data'])) {
-                $_SESSION['user_data'] = []; // S'assurer que le tableau est initialisé
-            }
-
-            // Ajouter un utilisateur à l'intérieur de $_SESSION['user_data']
-            $_SESSION['user_data'][] = [
-                'prenom' => $prenom,
-                'nom' => $nom,
-                'age' => $age,
-                'taille' => $taille,
-                'sexe' => $sexe
-            ];
-        }
-
-        // Copier les données de la session dans un tableau temporaire
-        $table = $_SESSION['user_data'];
     }
+
+    // Si l'utilisateur existe déjà, mettre à jour ses informations dans $table
+    if ($existingUserIndex !== null) {
+        // Fusionner les nouvelles données avec les anciennes
+        $table[$existingUserIndex] = array_merge($table[$existingUserIndex], [
+            'age' => $age ?? $table[$existingUserIndex]['age'],
+            'taille' => $taille ?? $table[$existingUserIndex]['taille'],
+            'sexe' => $sexe ?? $table[$existingUserIndex]['sexe'],
+            'date_naissance' => $date_naissance ?? $table[$existingUserIndex]['date_naissance'],
+            'connaissances' => !empty($connaissances) ? $connaissances : $table[$existingUserIndex]['connaissances'],
+            'couleur_preferee' => $couleur_preferee ?? $table[$existingUserIndex]['couleur_preferee'],
+            'image' => $image ? $image : $table[$existingUserIndex]['image']
+        ]);
+    } else {
+        // Ajouter un nouvel utilisateur dans $table
+        $table[] = [
+            'prenom' => $prenom,
+            'nom' => $nom,
+            'age' => $age,
+            'taille' => $taille,
+            'sexe' => $sexe,
+            'date_naissance' => $date_naissance,
+            'connaissances' => $connaissances,
+            'couleur_preferee' => $couleur_preferee,
+            'image' => $image
+        ];
+    }
+
+    // Synchroniser $table avec $_SESSION['user_data']
+    $_SESSION['user_data'] = $table;
 } else {
     // Si aucune donnée n'a été soumise, charger la session dans $table pour les traitements ultérieurs
     $table = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : [];
 }
+
+
 
 
 ?>
@@ -126,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "<h2>Débogage</h2>";
                         echo "<div class='w-50 h-75 d-flex justify-content-center align-items-center '>";
                         echo "<pre class='p-2'>";
-                        print_r($_SESSION['user_data']); // Affiche les données de $table pour débogage
+                        print_r($table); // Affiche les données de $table pour débogage
                         echo "</pre>";
                         echo  "</div>";
                         break;
