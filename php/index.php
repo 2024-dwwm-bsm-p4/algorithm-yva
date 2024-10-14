@@ -203,13 +203,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     foreach ($user as $key => $value) {
                                         if (is_array($value)) {
                                             $value = implode(', ', $value);  // Convertir le tableau en chaîne de caractères
-                                        }
+                                           print_r($value);
+                                        } 
                         
                                         // Vérifier si la clé est "image"
                                         if ($key === 'image' && !empty($value)) {
+
                                             // Afficher l'image avec une balise <img>
                                             echo "<p>à la ligne n°$lineNumber correspond la clé \"$key\" et contient : <br>";
-                                            echo "<img src='uploaded/$value' alt='Image de l'utilisateur' style='max-width:150px;'><br></p>";
+                                            echo "<img src='./uploaded/$value' alt='Image de l'utilisateur' style='max-width:150px;'><br></p>";
                                         } else {
                                             // Sinon afficher la clé et la valeur normalement
                                             echo "<p>à la ligne n°$lineNumber correspond la clé \"$key\" et contient \"$value\"</p>";
