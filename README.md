@@ -68,34 +68,34 @@ Livraison du projet dans 5 jours ouvrés à compter du début du brief.
 - Pensez à compléter le ***nom de la personne corrigée*** et le ***nom du correcteur*** dans l'entête du tableau.
 - Indiquez le **nombre d'étoiles obtenues** (l'étoile d'une *catégorie* est obtenue si tous ses critères de performance sont validés).
 
-| *nom de la personne corrigée*            |                                | *nom du correcteur*     |
+| *Yohann*            |                                | *Maxence*     |
 | :---- | :----: | :---: |
 | Critères de performance                  |                                | Remarques du correcteur |
 | ***Interface utilisateur***              |                                |                         |
 | - Fidèle aux maquettes fournies          | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - Formulaires bien structurés            | <ul><li>- [ ] &nbsp;</li></ul> |                         |
+| - Formulaires bien structurés            | <ul><li>- [X] &nbsp;</li></ul> |                         |
 |                                          | <ul><li>- [ ] ⭐</li></ul>     |                         |
 | ***Fonctionnalités***                    |                                |                         |
-| - Données sauvegardées en session        | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - Le formulaire 1 est fonctionnel        | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - Le formulaire 2 est fonctionnel        | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - Le mode débogage fonctionne            | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - La concaténation est correcte          | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - La boucle est dynamique                | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - L'upload est fonctionnel et sécurisé   | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-|                                          | <ul><li>- [ ] ⭐</li></ul>     |                         |
+| - Données sauvegardées en session        | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - Le formulaire 1 est fonctionnel        | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - Le formulaire 2 est fonctionnel        | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - Le mode débogage fonctionne            | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - La concaténation est correcte          | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - La boucle est dynamique                | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - L'upload est fonctionnel et sécurisé   | <ul><li>- [X] &nbsp;</li></ul> |                         |
+|                                          | <ul><li>- [X] ⭐</li></ul>     |                         |
 | ***Code***                               |                                |                         |
-| - Organisation et lisibilité du code     | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - Respect des bonnes pratiques PHP       | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-| - Commentaires dans le code              | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-|                                          | <ul><li>- [ ] ⭐</li></ul>     |                         |
+| - Organisation et lisibilité du code     | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - Respect des bonnes pratiques PHP       | <ul><li>- [X] &nbsp;</li></ul> |                         |
+| - Commentaires dans le code              | <ul><li>- [X] &nbsp;</li></ul> |                         |
+|                                          | <ul><li>- [X] ⭐</li></ul>     |                         |
 | ***Bonus***                              |                                |                         |
 | - Données dans un cookie                 | <ul><li>- [ ] &nbsp;</li></ul> |                         |
 | - Données injectées dans les formulaires | <ul><li>- [ ] &nbsp;</li></ul> |                         |
 |                                          | <ul><li>- [ ] ⭐</li></ul>     |                         |
 | ***Livrables***                          |                                |                         |
-| - Projet livré dans les délais           | <ul><li>- [ ] &nbsp;</li></ul> |                         |
-|                                          | <ul><li>- [ ] ⭐</li></ul>     |                         |
+| - Projet livré dans les délais           | <ul><li>- [X] &nbsp;</li></ul> |                         |
+|                                          | <ul><li>- [X] ⭐</li></ul>     |                         |
 
 **Nombre d'étoiles obtenues** : ⭐⭐⭐⭐⭐
 
